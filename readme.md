@@ -1,3 +1,19 @@
+###FOREWORD
+
+This is a Zaarly fork of the Nginx Buildpack. Unlike the vanilla buildpack, this repo contains customized binary files that allow our zaarly/router instances to use ssl.
+
+This fork needs to live on its own domain, because zaarly/router instances need to point to a unique git address when they are downloading buildpacks. 
+
+Every time you add a new configuration to nginx for use on our zaarly/router instances, you will have to recompile these binaries. Instructions on how to do so are included below.
+
+##Adding future config fixes: 
+
+1. Navigate to scripts/build_nginx.sh and add whatever extra compile-time options you desire under ./configure.
+2. Push this repo to a stand-alone heroku app.
+3. When this app finishes compiling, navigate to the heroku page for this app, and select nginx -> sbin -> nginx. This will download a binary FOR THIS SPECIFIC STACK. (IE, if you are trying to compile a binary that will be used by a router running on heroku cedar, push this repo to a cedar stack app. If you want to use it on cedar-14, push this repo to a cedar-14 app.)
+4. Copy and paste this binary in the /bin directory of this app. Its name should correspond to the name of the stack it was compiled for; either nginx-cedar, or nginx-cedar-14.
+5. Now all zaarly/router instances that point to this nginx buildpack will use your specified new nginx configurations.
+
 # Heroku Buildpack: NGINX
 
 Nginx-buildpack vendors NGINX inside a dyno and connects NGINX to an app server via UNIX domain sockets.
